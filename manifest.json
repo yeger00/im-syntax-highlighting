@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "version": "1.0.0",
+  "name": "IM Syntax Highlighting",
+  "description": "Adds syntax highlighting for instant messaging web apps.",
+  "icons": {"128": "icon.png"},
+  "author": "Avi Yeger",
+
+  "content_scripts": [
+    {
+      "matches": ["*://web.whatsapp.com/*",
+                  "*://chat.google.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": ["injected.js"]
+}
