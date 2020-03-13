@@ -1,4 +1,5 @@
 md = null;
+selector = null;
 flag = false;
 
 function init_md() {
@@ -14,15 +15,27 @@ function init_md() {
 	});
 }
 
-WHATSAPP_SELECTOR = "code[data-app-text-template]"
-GOOGLE_CHAT_SELECTOR = ".FMTudf"
+function init_selector() {
+	if (window.location.hostname.includes("whatsapp")) {
+		selector = "code[data-app-text-template]"
+	} else if (window.location.hostname.includes("chat.google")) {
+		selector =".FMTudf";
+	} else if (window.location.hostname.includes("telegram")) {
+		selector ="code";
+	}
+}
 
 function backtick_to_markdown() {
 	if (flag) {
 		return;
 	}
-	$(WHATSAPP_SELECTOR).each(function(index) {
-		if (!$( this ).attr("md")) {
+	if (!selector) {
+		return;
+	}
+	$(selector).each(function(index) {
+		if (!$( this ).attr("md") && 
+			(!$( this ).attr("class") ||
+			!$( this ).attr("class").startsWith("language-"))) {
 			$( this ).html(md.render("```" + $(this).text() + "\n```"));
 			$( this ).attr("md", "true");
 		}
@@ -30,6 +43,7 @@ function backtick_to_markdown() {
 }
 
 window.addEventListener("load", function() {
+	init_selector();
 	hljs.initHighlightingOnLoad();
 	init_md();
 	setInterval(backtick_to_markdown, 3000);
