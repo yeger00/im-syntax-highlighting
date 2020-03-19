@@ -36,7 +36,12 @@ function backtick_to_markdown() {
 		if (!$( this ).attr("md") && 
 			(!$( this ).attr("class") ||
 			!$( this ).attr("class").startsWith("language-"))) {
-			$( this ).html(md.render("```" + $(this).text() + "\n```"));
+			var code = $(this).text();
+			if (code.split("\n").length == 1) {
+				$( this ).html(md.render("```" + $(this).text() + "```"));
+			} else {
+				$( this ).html(md.render("```" + $(this).text() + "\n```"));
+			}
 			$( this ).attr("md", "true");
 		}
 	});
